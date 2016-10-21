@@ -1,0 +1,59 @@
+﻿@model IEnumerable<HARManager.Models.HARFile>
+
+<div id="body">
+    @Html.Raw(ViewBag.Error)
+    <br/>All HAR Entries:<br /><br />
+    <label id="harfiles" />
+</div>
+
+<hr />
+
+@using (Html.BeginForm("Index", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <h2>Create a new HAR File Entry</h2>
+    
+    <input type="file" name="file" /><br />
+    <input type="submit" value="Create HAR File" /><br /><br />
+}
+
+<table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.method)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.URL)
+            </th>
+            <th></th>
+        </tr>
+    
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.method)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.URL)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
+                @Html.ActionLink("Details", "Details", new { id=item.id }) |
+                @Html.ActionLink("Delete", "Delete", new { id=item.id })
+            </td>
+        </tr>
+    }
+    
+    </table>
+
+@section scripts{
+<script type="text/javascript">
+$(function()
+{
+        $.get('/api/harfiles/', function(data)
+        {
+            $('#harfiles').append(JSON.stringify(data));
+            //alert(data);
+        });
+});
+</script>
+}
